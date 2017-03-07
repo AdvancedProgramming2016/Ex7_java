@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" stylesheets="@../styles/gridStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GridController">
+    <children>
+        <BorderPane>
+            <top>
+                <HBox id="menuHBox" fx:id="menuHBox" alignment="CENTER" fillHeight="false" spacing="5.0">
+                    <children>
+                        <TextField fx:id="commandTxt" prefHeight="40.0" prefWidth="112.0" promptText="Commands">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin></TextField>
+                        <Button fx:id="sendBtn" mnemonicParsing="false" onAction="#changeText" prefHeight="40.0" prefWidth="112.0" text="SEND" />
+                        <Button fx:id="addBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="112.0" text="ADD" />
+                        <TextField prefHeight="40.0" prefWidth="112.0" promptText="Drivers" />
+                        <Label fx:id="timeLbl" alignment="CENTER" prefHeight="40.0" prefWidth="112.0" text="0">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="errorLbl" alignment="CENTER" prefHeight="40.0" prefWidth="112.0" text="No errors" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" top="5.0" />
+                    </padding>
+                </HBox>
+            </top>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" />
+            </padding>
+            <center>
+                <ScrollPane fx:id="gridScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="705.0" prefWidth="700.0">
+                    <content>
+                        <VBox fx:id="rows" alignment="CENTER" spacing="4.0" BorderPane.alignment="CENTER" />
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </children>
+</AnchorPane>

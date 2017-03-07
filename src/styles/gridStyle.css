@@ -1,0 +1,30 @@
+.root{
+    -fx-background-color: #4169e1;
+}
+
+.button{
+    -fx-background-color: aliceblue;
+}
+
+#timeLbl{
+    -fx-background-color: crimson;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 3 3 3 3;
+}
+
+#errorLbl{
+    -fx-border-color: white;
+    -fx-border-radius: 3 3 3 3;
+    -fx-border-width: 3;
+    -fx-text-fill: chartreuse;
+    -fx-font-weight: bold;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
