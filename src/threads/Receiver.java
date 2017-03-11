@@ -1,6 +1,7 @@
 package threads;
 
 import controllers.GridController;
+import javafx.application.Platform;
 import ui.Taxi;
 import java.io.IOException;
 
@@ -23,56 +24,58 @@ public class Receiver implements Runnable {
 
         while(!this.exitCalled){
 
-            try {
+                try {
 
-                this.serverResponse = gridController.getInFromServer().readLine();
 
-                //Close the system by exiting thread
-                if(this.serverResponse.equals("close")){
+                    this.serverResponse =
+                            gridController.getInFromServer().readLine();
 
-                    exitCalled = true;
+                    Platform.runLater(() -> {
+                        //Close the system by exiting thread
+                        if (this.serverResponse.equals("close")) {
+
+                            exitCalled = true;
+                        }
+
+                        //Notify about user input error.
+                        else if (this.serverResponse.equals("error")) {
+
+                            //Lock.
+                            this.gridController.getLock().lock();
+
+                            gridController.setError(true);
+
+                            //Unlock.
+                            this.gridController.getLock().unlock();
+                        }
+
+                        //Create new taxis.
+                        else if (!this.serverResponse.contains(",")) {
+
+                            //Lock.
+                            this.gridController.getLock().lock();
+
+                            createTaxis();
+
+                            //Unlock.
+                            this.gridController.getLock().unlock();
+                        }
+
+                        //Update taxis locations.
+                        else {
+
+                            //Lock.
+                            this.gridController.getLock().lock();
+
+                            updateLocations();
+
+                            //Unlock.
+                            this.gridController.getLock().unlock();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                //Notify about user input error.
-                else if(this.serverResponse.equals("error")){
-
-                    //Lock.
-                    this.gridController.getLock().lock();
-
-                    gridController.setError(true);
-
-                    //Unlock.
-                    this.gridController.getLock().unlock();
-                }
-
-                //Create new taxis.
-                else if(!this.serverResponse.contains(",")) {
-
-                    //Lock.
-                    this.gridController.getLock().lock();
-
-                   createTaxis();
-
-                    //Unlock.
-                    this.gridController.getLock().unlock();
-                }
-
-                //Update taxis locations.
-                else{
-
-                    //Lock.
-                    this.gridController.getLock().lock();
-
-                   updateLocations();
-
-                    //Unlock.
-                    this.gridController.getLock().unlock();
-                }
-            }
-
-            catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         //Close the window.
