@@ -42,7 +42,7 @@ public class Tile extends StackPane {
 
         else{
 
-            border.setFill(Color.rgb(203, 209, 219));
+            border.setFill(Color.rgb(188, 218, 219));
         }
     }
 }

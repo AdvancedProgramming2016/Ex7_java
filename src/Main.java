@@ -1,3 +1,4 @@
+import controllers.GridController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+    public static String[] arguments;
+
     /**
      * The method creates the stage.
      * @param primaryStage
@@ -16,7 +19,14 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("resources/grid.fxml"));
+
+        FXMLLoader fxmlLoader = new
+                FXMLLoader(getClass().getResource("resources/grid.fxml"));
+
+        GridController gridController = new GridController();
+        gridController.setSocket(arguments[0], Integer.parseInt(arguments[1]));
+        fxmlLoader.setController(gridController);
+        Parent root = fxmlLoader.load();
         primaryStage.setTitle("Taxi Center");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -26,7 +36,10 @@ public class Main extends Application {
      * The main method.
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws  Exception {
+
+       arguments = args;
+
         launch(args);
     }
 }
