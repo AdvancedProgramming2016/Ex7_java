@@ -36,20 +36,21 @@ public class GridController implements Initializable {
     @FXML
     private Label     errorLbl;
 
-    private ReentrantLock    lock;
-    private String           ip;
-    private int              port;
-    private int              gridHeight;
-    private int              gridWidth;
-    private Socket           clientSocket;
-    private BufferedReader   inFromUser;
-    private BufferedReader   inFromServer;
+    private ReentrantLock      lock;
+    private String             ip;
+    private int                port;
+    private int                gridHeight;
+    private int                gridWidth;
+    private Socket             clientSocket;
+    private BufferedReader     inFromUser;
+    private BufferedReader     inFromServer;
     private OutputStreamWriter outToServer;
-    private String           command;
-    private Tile[][]         map;
-    private ArrayList<Taxi>  taxis;
-    private int              timeCounter;
-    private Runnable         receiver;
+    private String             command;
+    private String             obstacles;
+    private Tile[][]           map;
+    private ArrayList<Taxi>    taxis;
+    private int                timeCounter;
+    private Runnable           receiver;
 
     /**
      * Initializes the window.
@@ -94,7 +95,11 @@ public class GridController implements Initializable {
             this.gridWidth = Integer.parseInt(gridParameters[1]);
 
             //Creates the map of tiles.
-            buildMap();
+            this.buildMap();
+
+            //Sets the obstacles on the map.
+            this.obstacles = this.inFromServer.readLine();
+            this.setObstacles();
 
             //Sets onAction methods to buttons.
             this.sendBtn.setOnAction(e -> sendBtnClicked());
@@ -223,7 +228,7 @@ public class GridController implements Initializable {
 
         for (Taxi taxi : this.taxis) {
 
-            this.map[taxi.getxPosition()][taxi.getyPosition()].setImage(false);
+            this.map[taxi.getxPosition()][taxi.getyPosition()].setTaxi(false);
         }
 
     }
@@ -235,7 +240,7 @@ public class GridController implements Initializable {
 
         for (Taxi taxi : this.taxis) {
 
-            this.map[taxi.getxPosition()][taxi.getyPosition()].setImage(true);
+            this.map[taxi.getxPosition()][taxi.getyPosition()].setTaxi(true);
         }
     }
 
@@ -259,6 +264,20 @@ public class GridController implements Initializable {
      */
     public ReentrantLock getLock() {
         return this.lock;
+    }
+
+    public void setObstacles() {
+
+        String[] positions = this.obstacles.split(" ");
+        String[] indices;
+
+        //Updates the taxis positions according to the server input.
+        for (int i = 0; i < positions.length; i++) {
+
+            indices = positions[i].split(",");
+            this.map[Integer.parseInt(indices[0])][Integer.parseInt(indices[1])]
+                    .setObstacle();
+        }
     }
 }
 

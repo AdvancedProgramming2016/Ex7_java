@@ -32,7 +32,7 @@ public class Tile extends StackPane {
      * Sets the image of a taxi inside the tile, if the tile is taken.
      * @param isTaxi
      */
-    public void setImage(boolean isTaxi){
+    public void setTaxi(boolean isTaxi){
 
         if(isTaxi){
 
@@ -44,5 +44,15 @@ public class Tile extends StackPane {
 
             border.setFill(Color.rgb(188, 218, 219));
         }
+    }
+
+    /**
+     * Sets the tile image to an obstacle.
+     */
+    public void setObstacle(){
+
+        tileImage = new Image("resources/icons/obstacle_icon.png");
+        border.setFill(new ImagePattern(tileImage));
+
     }
 }
