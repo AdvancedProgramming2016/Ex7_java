@@ -12,10 +12,7 @@ import threads.Receiver;
 import ui.Taxi;
 import ui.Tile;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,7 +44,7 @@ public class GridController implements Initializable {
     private Socket           clientSocket;
     private BufferedReader   inFromUser;
     private BufferedReader   inFromServer;
-    private DataOutputStream outToServer;
+    private OutputStreamWriter outToServer;
     private String           command;
     private Tile[][]         map;
     private ArrayList<Taxi>  taxis;
@@ -81,7 +78,7 @@ public class GridController implements Initializable {
 
             this.clientSocket = new Socket(this.ip, this.port);
             this.outToServer =
-                    new DataOutputStream(clientSocket.getOutputStream());
+                    new OutputStreamWriter(clientSocket.getOutputStream());
             this.inFromServer =
                     new BufferedReader(new
                             InputStreamReader(clientSocket.getInputStream()));
@@ -131,7 +128,11 @@ public class GridController implements Initializable {
 
         try {
 
-            this.outToServer.writeBytes(this.command + '\n');
+            this.lock.lock();
+            System.out.println(command);
+            this.outToServer.write(this.command + '\0');
+            this.outToServer.flush();
+            this.lock.unlock();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,7 +151,11 @@ public class GridController implements Initializable {
 
         try {
 
-            this.outToServer.writeBytes(driverRequest + '\n');
+            this.lock.lock();
+            System.out.println(driverRequest);
+            this.outToServer.write(driverRequest + '\0');
+            this.outToServer.flush();
+            this.lock.unlock();
 
         } catch (IOException e) {
             e.printStackTrace();
