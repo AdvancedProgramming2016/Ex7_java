@@ -38,6 +38,7 @@ public class GridController implements Initializable {
 
     private ReentrantLock      lock;
     private String             ip;
+    private String             clientPath;
     private int                port;
     private int                gridHeight;
     private int                gridWidth;
@@ -64,6 +65,7 @@ public class GridController implements Initializable {
         //TODO change the textField of the drivers into a textArea, and check
         // that it works with the server.
         //TODO check that the received height and width are correct
+        //TODO make a valid. check that a number of drivers is selected before pressing the add button on the gui
 
         String   rawGridParameters;
         String[] gridParameters;
@@ -71,6 +73,9 @@ public class GridController implements Initializable {
         this.taxis = new ArrayList<>();
         this.timeCounter = 0;
         this.lock = new ReentrantLock();
+
+        //Sets the client file path
+        this.clientPath = "./client.out";
 
         this.inFromUser = new BufferedReader(new InputStreamReader(System.in));
         this.clientSocket = null;
@@ -81,6 +86,7 @@ public class GridController implements Initializable {
             this.outToServer =
                     new OutputStreamWriter(clientSocket.getOutputStream());
             this.inFromServer =
+
                     new BufferedReader(new
                             InputStreamReader(clientSocket.getInputStream()));
 
@@ -125,6 +131,9 @@ public class GridController implements Initializable {
         this.port = port;
     }
 
+    /**
+     * The method the send button will perform.
+     */
     private void sendBtnClicked() {
 
         setError(false);
@@ -154,17 +163,17 @@ public class GridController implements Initializable {
         driverRequest = driversTxt.getText();
         driversTxt.setText("");
 
-        try {
+        //this.lock.lock();
+        //System.out.println(driverRequest);
 
-            this.lock.lock();
-            System.out.println(driverRequest);
-            this.outToServer.write(driverRequest + '\0');
-            this.outToServer.flush();
-            this.lock.unlock();
+        //Opens a new client
+        openClient(driverRequest);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //TODO send to driver client instead
+        // this.outToServer.write(driverRequest + '\0');
+        //this.outToServer.flush();
+        //this.lock.unlock();
+
     }
 
     public BufferedReader getInFromServer() {
@@ -271,12 +280,57 @@ public class GridController implements Initializable {
         String[] positions = this.obstacles.split(" ");
         String[] indices;
 
+        if(positions[0].equals("")){
+
+            return;
+        }
+
         //Updates the taxis positions according to the server input.
         for (int i = 0; i < positions.length; i++) {
 
             indices = positions[i].split(",");
             this.map[Integer.parseInt(indices[0])][Integer.parseInt(indices[1])]
                     .setObstacle();
+        }
+    }
+
+    /**
+     * Returns the Ip string.
+     * @return
+     */
+    public String getIp() {
+        return ip;
+    }
+
+    /**
+     * Returns the port number.
+     * @return
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * Returns the client file path.
+     * @return String
+     */
+    public String getClientPath() {
+        return clientPath;
+    }
+
+    /**
+     * Opens a client process.
+     */
+    public void openClient(String driverParams){
+
+        try {
+
+            String[] params ={this.getClientPath(), this.getIp(), Integer.toString(this.getPort()), driverParams};
+
+            Runtime.getRuntime().exec(params);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
