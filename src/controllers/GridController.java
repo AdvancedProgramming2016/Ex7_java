@@ -151,6 +151,11 @@ public class GridController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if(command.equals("9")){
+
+            increaseTime();
+        }
     }
 
     /**
@@ -325,9 +330,24 @@ public class GridController implements Initializable {
 
         try {
 
-            String[] params ={this.getClientPath(), this.getIp(), Integer.toString(this.getPort()), driverParams};
+//            String runtimeArgs[] = new String[8];
+//
+//            //Create the runtime arguments
+//            runtimeArgs[0] = "./client.out";
+//            runtimeArgs[1] = this.getIp().replace("/", "");
+//            runtimeArgs[2] = Integer.toString(getPort());
+//            for (int i = 1; i < 6; i++) {
+//                runtimeArgs[2 + i] = driverParams.split(",")[i - 1];
+//            }
+//
+//            //Run a client with the runtime arguments
+//            Runtime.getRuntime().exec(runtimeArgs);
 
-            Runtime.getRuntime().exec(params);
+            String[] params = new String[] {this.getClientPath(), this.getIp(), Integer.toString(this.getPort()), driverParams};
+
+            //Runtime.getRuntime().exec(params);
+
+            Process p = Runtime.getRuntime().exec(params);
 
         } catch (IOException e) {
             e.printStackTrace();

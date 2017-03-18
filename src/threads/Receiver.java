@@ -30,6 +30,8 @@ public class Receiver implements Runnable {
                     this.serverResponse =
                             gridController.getInFromServer().readLine();
 
+                    System.out.println("Server: " + serverResponse);
+
                     Platform.runLater(() -> {
                         //Close the system by exiting thread
                         if (this.serverResponse.equals("close")) {
@@ -117,6 +119,6 @@ public class Receiver implements Runnable {
         this.gridController.turnImagesOn();
 
         //Increase the time.
-        this.gridController.increaseTime();
+        //this.gridController.increaseTime();
     }
 }
