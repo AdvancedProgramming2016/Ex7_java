@@ -143,7 +143,6 @@ public class GridController implements Initializable {
         try {
 
             this.lock.lock();
-            System.out.println(command);
             this.outToServer.write(this.command + '\0');
             this.outToServer.flush();
             this.lock.unlock();
