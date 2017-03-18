@@ -1,4 +1,3 @@
-import controllers.GridController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         FXMLLoader fxmlLoader = new
-                FXMLLoader(getClass().getResource("resources/grid.fxml"));
+                FXMLLoader(getClass().getResource("grid.fxml"));
 
         GridController gridController = new GridController();
         gridController.setSocket(arguments[0], Integer.parseInt(arguments[1]));

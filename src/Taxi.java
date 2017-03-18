@@ -1,5 +1,3 @@
-package ui;
-
 /**
  * Represents a taxi which will appear on the map
  */

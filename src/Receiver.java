@@ -1,8 +1,5 @@
-package threads;
-
-import controllers.GridController;
 import javafx.application.Platform;
-import ui.Taxi;
+
 import java.io.IOException;
 
 /**
@@ -32,9 +29,9 @@ public class Receiver implements Runnable {
 
                     Platform.runLater(() -> {
                         //Close the system by exiting thread
-                        if (this.serverResponse.equals("close")) {
+                        if (this.serverResponse == null || this.serverResponse.equals("close")) {
 
-                            exitCalled = true;
+                            gridController.closeWindow();
                         }
 
                         //Notify about user input error.
@@ -118,5 +115,11 @@ public class Receiver implements Runnable {
 
         //Increase the time.
         //this.gridController.increaseTime();
+    }
+
+    public void close(){
+
+        this.exitCalled = true;
+        this.gridController.closeWindow();
     }
 }

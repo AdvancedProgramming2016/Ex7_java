@@ -1,5 +1,3 @@
-package ui;
-
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -36,7 +34,7 @@ public class Tile extends StackPane {
 
         if(isTaxi){
 
-            tileImage = new Image("resources/icons/taxi_icon.png");
+            tileImage = new Image("resources/taxi_icon.png");
             border.setFill(new ImagePattern(tileImage));
         }
 
@@ -51,7 +49,7 @@ public class Tile extends StackPane {
      */
     public void setObstacle(){
 
-        tileImage = new Image("resources/icons/obstacle_icon.png");
+        tileImage = new Image("resources/obstacle_icon.png");
         border.setFill(new ImagePattern(tileImage));
 
     }

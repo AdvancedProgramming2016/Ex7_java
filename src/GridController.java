@@ -1,5 +1,3 @@
-package controllers;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import threads.Receiver;
-import ui.Taxi;
-import ui.Tile;
 
 import java.io.*;
 import java.net.Socket;
@@ -22,36 +17,38 @@ import java.util.concurrent.locks.ReentrantLock;
 public class GridController implements Initializable {
 
     @FXML
-    private Button    sendBtn;
+    private Button sendBtn;
     @FXML
-    private Button    addBtn;
+    private Button addBtn;
     @FXML
-    private Label     timeLbl;
+    private Label timeLbl;
     @FXML
-    private VBox      rows;
+    private VBox rows;
     @FXML
     private TextField commandTxt;
     @FXML
     private TextField driversTxt;
     @FXML
-    private Label     errorLbl;
+    private Label errorLbl;
 
-    private ReentrantLock      lock;
-    private String             ip;
-    private String             clientPath;
-    private int                port;
-    private int                gridHeight;
-    private int                gridWidth;
-    private Socket             clientSocket;
-    private BufferedReader     inFromUser;
-    private BufferedReader     inFromServer;
+    private ReentrantLock lock;
+    private String ip;
+    private String clientPath;
+    private int port;
+    private int gridHeight;
+    private int gridWidth;
+    private Socket clientSocket;
+    private BufferedReader inFromUser;
+    private BufferedReader inFromServer;
     private OutputStreamWriter outToServer;
-    private String             command;
-    private String             obstacles;
-    private Tile[][]           map;
-    private ArrayList<Taxi>    taxis;
-    private int                timeCounter;
-    private Runnable           receiver;
+    private String command;
+    private String obstacles;
+    private Tile[][] map;
+    private ArrayList<Taxi> taxis;
+    private int timeCounter;
+    private Runnable receiver;
+    private boolean exitClose;
+    private Thread thread;
 
     /**
      * Initializes the window.
@@ -67,7 +64,7 @@ public class GridController implements Initializable {
         //TODO check that the received height and width are correct
         //TODO make a valid. check that a number of drivers is selected before pressing the add button on the gui
 
-        String   rawGridParameters;
+        String rawGridParameters;
         String[] gridParameters;
 
         this.taxis = new ArrayList<>();
@@ -113,7 +110,8 @@ public class GridController implements Initializable {
 
             //Turn thread on.
             this.receiver = new Receiver(this);
-            new Thread(this.receiver).start();
+            this.thread = new Thread(this.receiver);
+            thread.start();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,10 +149,11 @@ public class GridController implements Initializable {
             e.printStackTrace();
         }
 
-        if(command.equals("9")){
+        if (command.equals("9")) {
 
             increaseTime();
         }
+
     }
 
     /**
@@ -284,7 +283,7 @@ public class GridController implements Initializable {
         String[] positions = this.obstacles.split(" ");
         String[] indices;
 
-        if(positions[0].equals("")){
+        if (positions[0].equals("")) {
 
             return;
         }
@@ -300,6 +299,7 @@ public class GridController implements Initializable {
 
     /**
      * Returns the Ip string.
+     *
      * @return
      */
     public String getIp() {
@@ -308,6 +308,7 @@ public class GridController implements Initializable {
 
     /**
      * Returns the port number.
+     *
      * @return
      */
     public int getPort() {
@@ -316,6 +317,7 @@ public class GridController implements Initializable {
 
     /**
      * Returns the client file path.
+     *
      * @return String
      */
     public String getClientPath() {
@@ -325,7 +327,7 @@ public class GridController implements Initializable {
     /**
      * Opens a client process.
      */
-    public void openClient(String driverParams){
+    public void openClient(String driverParams) {
 
         try {
 
@@ -342,7 +344,7 @@ public class GridController implements Initializable {
 //            //Run a client with the runtime arguments
 //            Runtime.getRuntime().exec(runtimeArgs);
 
-            String[] params = new String[] {this.getClientPath(), this.getIp(), Integer.toString(this.getPort()), driverParams};
+            String[] params = new String[]{this.getClientPath(), this.getIp(), Integer.toString(this.getPort()), driverParams};
 
             //Runtime.getRuntime().exec(params);
 
@@ -352,6 +354,15 @@ public class GridController implements Initializable {
             e.printStackTrace();
         }
     }
-}
 
+    public boolean getExitClose() {
+
+        return this.exitClose;
+    }
+
+    public OutputStreamWriter getSocket() {
+
+        return outToServer;
+    }
+}
 
