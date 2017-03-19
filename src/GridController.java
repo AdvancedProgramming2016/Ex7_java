@@ -136,6 +136,7 @@ public class GridController implements Initializable {
 
         setError(false);
         this.command = commandTxt.getText();
+        System.out.println(this.command);
         commandTxt.setText("");
 
         try {
